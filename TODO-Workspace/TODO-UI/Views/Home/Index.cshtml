@@ -1,0 +1,50 @@
+﻿@model IEnumerable<TODO_DAL.ToDo>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    if (TempData["Message"] != null)
+    {
+        @Html.Raw($"<script>alert('{TempData["Message"]}');</script>")
+        TempData["Message"] = null;
+    }
+}
+
+<p>
+    @Html.ActionLink("Ekle", "AddIndex", null, htmlAttributes: new { @class = "btn btn-primary" })
+</p>
+
+<table class="table table-striped">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AddedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ToDoDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ModifiedDate)
+        </th>
+        <th>
+            @Html.DisplayName("İşlemler")
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <th>@Html.DisplayFor(modelItem => item.Description)</th>
+            <th>@Html.ValueFor(model => item.AddedDate.Date, "{0:d}")</th>
+            <th>@Html.ValueFor(model => item.ToDoDate.Date, "{0:d}")</th>
+            <th>@Html.DisplayFor(modelItem => item.ModifiedDate)</th>
+            <th>
+                @Html.ActionLink("Düzenle", "EditIndex", new { @id = item.Id }, new { @class = "btn btn-success" })
+                @Html.ActionLink("Sil", "Delete", new { @id = item.Id }, new { @class = "btn btn-warning" })
+            </th>
+        </tr>
+    }
+</table>
