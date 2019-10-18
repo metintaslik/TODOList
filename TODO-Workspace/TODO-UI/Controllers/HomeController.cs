@@ -9,33 +9,19 @@ namespace TODO_UI.Controllers
 {
     public class HomeController : Controller
     {
-        IToDo _iToDo;
+        private IToDo _iToDo;
+        public static List<ToDo> ToDo;
 
-        public HomeController(IToDo itoDo)
+        public HomeController(IToDo iToDo)
         {
-            _iToDo = itoDo;
+            _iToDo = iToDo;
         }
 
         // GET: Home
         public ActionResult Index()
         {
+            ToDo = _iToDo.Alert();
             return View(_iToDo.GetAllToDo());
-        }
-
-        public ActionResult AddIndex()
-        {
-            return View();
-        }
-
-        public ActionResult AddToDo(ToDo @toDo)
-        {
-            TempData["Message"] = _iToDo.AddToDo(@toDo);
-            return RedirectToAction("Index");
-        }
-
-        public ActionResult EditIndex(int id)
-        {
-            return View(_iToDo.ToDoFindById(id));
         }
     }
 }

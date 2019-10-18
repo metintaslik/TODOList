@@ -328,3 +328,6 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+/TODO-Workspace/TODO-UI/Content/font-awesome.css
+/TODO-Workspace/TODO-UI/Content/font-awesome.min.css
+/TODO-Workspace/TODO-UI/fonts

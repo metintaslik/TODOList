@@ -13,5 +13,6 @@ namespace TODO_DAL
         string UpdateToDo(ToDo to_Do);
         string DeleteToDo(int id);
         ToDo ToDoFindById(int id);
+        List<ToDo> Alert();
     }
 }

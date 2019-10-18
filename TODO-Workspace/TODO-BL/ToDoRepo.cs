@@ -18,7 +18,7 @@ namespace TODO_BL
 
         #region Methods
         /// <summary>
-        /// Yapılacak eklemek için kullanılır. Ekleme başarılı ise "Başarıyla eklendi." geriye döner.
+        /// Yapılacaklar listesine eklemek için kullanılır. Ekleme başarılı ise "Başarıyla eklendi." geriye döner.
         /// <para>Daha önceden eklenmiş bir yapılacak eklendiyse "Başarısız, bu yapılacak daha önceden eklenmiş." hatası geriye döner.</para>
         /// <para>Hatalı bir durum ile karşılaşıldığında geriye hata mesajı döner.</para>
         /// </summary>
@@ -28,7 +28,7 @@ namespace TODO_BL
         {
             try
             {
-                if (!_toDoList.Any(x => x.Description != to_Do.Description && x.ToDoDate != to_Do.ToDoDate))
+                if (!(_toDoList.Where(x => x.ToDoDate == to_Do.ToDoDate && x.Description == to_Do.Description).Any()))
                 {
                     to_Do.Id = _counter++;
                     to_Do.AddedDate = DateTime.Now.Date;
@@ -45,7 +45,7 @@ namespace TODO_BL
         }
 
         /// <summary>
-        /// Yapılacak silmek için DeleteToDo() methodu kullanılır. Silme başarılı ise "Başarıyla silindi." geriye döner.
+        /// Yapılacaklar listesinden silmek için DeleteToDo() methodu kullanılır. Silme başarılı ise "Başarıyla silindi." geriye döner.
         /// <para>Hatalı bir durum ile karşılaşıldığında geriye hata mesajı döner.</para>
         /// </summary>
         /// <param name="id">Silinmek istenen yapılacağın id'si</param>
@@ -81,7 +81,7 @@ namespace TODO_BL
         }
 
         /// <summary>
-        /// Güncellenicek yapılacak için kullanılır. Güncelleme başarılı ise "Başarıyla güncellendi." geriye döner.
+        /// Güncelleme yapmak için kullanılır. Güncelleme başarılı ise "Başarıyla güncellendi." geriye döner.
         /// <para>Hatalı bir durum ile karşılaşıldığında geriye hata mesajı döner.</para>
         /// </summary>
         /// <param name="to_Do">Listede olan yapılacağı güncellemek için ToDo referans tipli parametre</param>
@@ -90,11 +90,11 @@ namespace TODO_BL
         {
             try
             {
-                _toDoList.ForEach(x =>
+                _toDoList.Where(x=>x.Id == to_Do.Id).ToList().ForEach(x =>
                 {
                     x.Description = to_Do.Description;
-                    x.ModifiedDate = DateTime.Now.Date;
                     x.ToDoDate = to_Do.ToDoDate;
+                    x.ModifiedDate = DateTime.Now.Date;
                 });
                 return "Başarıyla güncellendi.";
             }
@@ -109,6 +109,24 @@ namespace TODO_BL
             try
             {
                 return _toDoList.Find(x => x.Id == id);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public List<ToDo> Alert()
+        {
+            try
+            {
+                List<ToDo> todo = _toDoList.Where(x => x.ToDoDate == DateTime.Now.Date).ToList();
+                if (todo != null)
+                {
+                    return todo;
+                }
+                else
+                    return null;
             }
             catch (Exception)
             {

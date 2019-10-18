@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<TODO_DAL.ToDo>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Ana Sayfa";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     if (TempData["Message"] != null)
@@ -12,22 +12,69 @@
 }
 
 <p>
-    @Html.ActionLink("Ekle", "AddIndex", null, htmlAttributes: new { @class = "btn btn-primary" })
+    @Html.ActionLink("Ekle", "Index", "Add", null, htmlAttributes: new { @class = "btn btn-primary" })
 </p>
+
+@if (TODO_UI.Controllers.HomeController.ToDo.Count > 0)
+{
+    <script>
+        $(function () {
+            $('#speedbump').modal("show");
+        })
+    </script>
+
+    <div class="modal fade" id="speedbump" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1><b>Bugün Yapılacaklar Var!</b></h1>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-responsive table-hover">
+                        <tr>
+                            <td><b>Açıklama</b></td>
+                            <td><b>Tarih</b></td>
+                            <td><b>Düzenleme Tarihi</b></td>
+                        </tr>
+                        @foreach (var item in TODO_UI.Controllers.HomeController.ToDo)
+                        {
+                            if (item.ModifiedDate == null)
+                            {
+                                <tr>
+                                    <td class="col-12">@item.Description</td>
+                                    <td class="col-12">@item.ToDoDate.ToShortDateString()</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td class="col-4">@item.Description</td>
+                                    <td class="col-4">@item.ToDoDate.ToShortDateString()</td>
+                                    <td class="col-4">@item.ModifiedDate.Value.ToShortDateString()</td>
+
+                                </tr>
+                            }
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 <table class="table table-striped">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayName("Açıklama")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.AddedDate)
+            @Html.DisplayName("Eklenme Tarihi")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ToDoDate)
+            @Html.DisplayName("Tarih")
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ModifiedDate)
+            @Html.DisplayName("Düzenleme Tarihi")
         </th>
         <th>
             @Html.DisplayName("İşlemler")
@@ -42,8 +89,8 @@
             <th>@Html.ValueFor(model => item.ToDoDate.Date, "{0:d}")</th>
             <th>@Html.DisplayFor(modelItem => item.ModifiedDate)</th>
             <th>
-                @Html.ActionLink("Düzenle", "EditIndex", new { @id = item.Id }, new { @class = "btn btn-success" })
-                @Html.ActionLink("Sil", "Delete", new { @id = item.Id }, new { @class = "btn btn-warning" })
+                @Html.ActionLink("Düzenle", "Index", "Edit", new { @id = item.Id }, new { @class = "btn btn-warning" })
+                @Html.ActionLink("Sil", "Index", "Delete", new { @id = item.Id }, new { @class = "btn btn-danger" })
             </th>
         </tr>
     }
